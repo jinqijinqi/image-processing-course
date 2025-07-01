@@ -1,6 +1,341 @@
 # UESTC image processing course (2024-2025)
 # Lecturer: Jin Qi
 # You are welcome!
+
+
+---
+
+**评分标准：**
+
+* 公式书写正确，推导清晰（20分）
+* 代码规范，可复现，注释合理（20分）
+* 结果清晰、对比分析到位（20分）
+* 心得体会有独立思考，联系应用（20分）
+* 排版规范，格式整齐（20分）
+
+---
+
+
+---
+
+# 《数字图像处理》第3章实验报告范例
+
+* **姓名：** 张三
+* **学号：** 2023123456
+* **实验题目：** 第3章 图像增强与直方图均衡化实验
+* **实验时间：** 2024年9月20日
+
+---
+
+## 一、实验目的
+
+本实验旨在理解和实现图像的基本增强方法，包括灰度线性变换、对数变换及直方图均衡化。通过对一幅简单灰度图像的处理，加深对数字图像增强原理和实际效果的认识。
+
+---
+
+## 二、实验内容/步骤
+
+1. **生成并归一化一幅4×4灰度图像**
+2. **进行对数变换与直方图均衡化**
+3. **可视化并对比处理结果**
+
+**主要代码如下：**
+
+```python
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+
+# 1. 生成并归一化灰度图像
+img = np.array([[50,120,180,200],
+                [80,130,170,195],
+                [90,140,160,180],
+                [70,110,150,175]], dtype=np.float32)
+img_norm = (img - img.min()) / (img.max() - img.min())
+
+# 2. 对数变换
+img_log = np.log1p(img) / np.log1p(img.max())
+
+# 3. 直方图均衡化
+img_uint8 = (img_norm*255).astype(np.uint8)
+img_eq = cv2.equalizeHist(img_uint8)
+
+# 4. 可视化结果
+plt.figure(figsize=(12,3))
+plt.subplot(1,4,1); plt.imshow(img, cmap='gray'); plt.title('原始图像')
+plt.subplot(1,4,2); plt.imshow(img_norm, cmap='gray'); plt.title('归一化')
+plt.subplot(1,4,3); plt.imshow(img_log, cmap='gray'); plt.title('对数变换')
+plt.subplot(1,4,4); plt.imshow(img_eq, cmap='gray'); plt.title('直方图均衡')
+plt.show()
+```
+
+---
+
+## 三、算法与数学推导
+
+### 1. 归一化公式
+
+$$
+I' = \frac{I - I_{min}}{I_{max} - I_{min}}
+$$
+
+其中，$I_{min}$ 和 $I_{max}$ 分别为图像的最小和最大像素值。
+
+### 2. 对数变换公式
+
+$$
+s = c \cdot \log(1 + r)
+$$
+
+本实验取 $c = 1/\log(1 + r_{max})$ 实现归一化。
+
+### 3. 直方图均衡化公式
+
+$$
+s_k = T(r_k) = (L-1)\sum_{j=0}^{k} p_r(r_j)
+$$
+
+其中，$L$ 为灰度级数，$p_r(r_j)$ 为第$j$级的概率。
+
+---
+
+## 四、实验结果与分析
+
+**运行结果：**
+
+* 原始图像、归一化、对数变换、直方图均衡化均已显示。
+* 处理后图像明显增强了对比度，尤其是直方图均衡化能拉伸并均衡灰度分布。
+
+**分析：**
+
+* 对数变换对低灰度区域提升更明显，高灰度区域压缩，对增强暗部信息有效。
+* 直方图均衡化使图像整体对比度提升、细节更丰富，但可能产生噪声放大。
+* 不同方法适用于不同图像特性，应按实际需求选择。
+
+---
+
+## 五、心得与思考
+
+本次实验让我理解了数字图像增强的本质——利用数学变换提升图像可视性。掌握了归一化、对数变换和直方图均衡化的原理与代码实现。实际操作中感受到理论和实践结合的重要性，例如均衡化虽能提升对比，但对小尺寸图像会有“分块效应”，在大图像和医学等实际应用中需合理调整参数。
+
+此外，通过查阅OpenCV等库资料，提高了自主查找与解决问题的能力。今后希望能在医学影像预处理等实际项目中，灵活应用这些图像增强方法。
+
+---
+
+好的！下面是**严格按照《数字图像处理》（冈萨雷斯）经典教材章节**编排的**周项目/作业清单与模板**。每周作业包含**姓名、学号、实验题目、实验内容（代码）、数学推导（公式/理论）、实验结果、分析与总结**等模块，适合标准本科/研究生数字图像处理课程教学。
+
+---
+
+# 📙《数字图像处理》章节式课程项目
+
+---
+
+## **Week 1：数字图像基础（第2章）**
+
+**主要内容：像素、灰度级、基本变换**
+
+```python
+import numpy as np
+img = np.random.randint(50,200,(4,4)).astype(np.float32)
+img_norm = (img - img.min())/(img.max() - img.min())
+print("原始：\n", img)
+print("归一化：\n", img_norm)
+```
+
+**公式**
+
+$$
+I' = \frac{I - I_{min}}{I_{max} - I_{min}}
+$$
+
+---
+
+## **Week 2：图像增强（一）- 灰度变换与直方图处理（第3章）**
+
+**内容：对数变换、直方图均衡化等**
+
+```python
+import cv2
+img_log = np.log1p(img)/np.log1p(img.max())
+img_uint8 = (img_norm*255).astype(np.uint8)
+img_eq = cv2.equalizeHist(img_uint8)
+```
+
+**公式**
+对数变换：
+
+$$
+s = c\cdot\log(1+r)
+$$
+
+直方图均衡化：
+
+$$
+s_k = T(r_k) = (L-1)\sum_{j=0}^{k} p_r(r_j)
+$$
+
+---
+
+## **Week 3：空间滤波（第4章）**
+
+**内容：均值滤波、中值滤波、锐化（Sobel、Laplacian）**
+
+```python
+img_med = cv2.medianBlur(img_uint8, 3)
+sobel = cv2.Sobel(img_norm, cv2.CV_64F, 1, 1, ksize=3)
+laplacian = cv2.Laplacian(img_norm, cv2.CV_64F)
+```
+
+**公式**
+均值滤波器、Sobel算子、拉普拉斯算子矩阵。
+
+---
+
+## **Week 4：频域处理基础（第5章）**
+
+**内容：傅里叶变换、低通/高通滤波**
+
+```python
+f = np.fft.fft2(img_norm)
+fshift = np.fft.fftshift(f)
+mask = np.zeros_like(img_norm); mask[1:3,1:3]=1
+fshift_filtered = fshift * mask
+img_back = np.fft.ifft2(np.fft.ifftshift(fshift_filtered)).real
+```
+
+**公式**
+二维DFT：
+
+$$
+F(u,v) = \sum_{x=0}^{M-1}\sum_{y=0}^{N-1} f(x,y) e^{-j2\pi(ux/M+vy/N)}
+$$
+
+---
+
+## **Week 5：图像复原（第5章）**
+
+**内容：反卷积、维纳滤波（简单演示）**
+
+```python
+from scipy.signal import convolve2d
+kernel = np.ones((3,3))/9
+img_blur = convolve2d(img_norm, kernel, mode='same', boundary='symm')
+img_deblur = img_blur / (kernel.sum() + 1e-8)
+```
+
+**公式**
+维纳滤波基本表达式。
+
+---
+
+## **Week 6：色彩图像处理（第6章）**
+
+**内容：RGB-Gray互转，通道处理，伪彩色**
+
+```python
+import matplotlib.pyplot as plt
+img_rgb = np.stack([img_norm]*3,axis=-1)
+img_gray = cv2.cvtColor((img_rgb*255).astype(np.uint8), cv2.COLOR_RGB2GRAY)
+```
+
+**公式**
+灰度化公式：
+
+$$
+Gray = 0.299R + 0.587G + 0.114B
+$$
+
+---
+
+## **Week 7：几何变换与插值（第7章）**
+
+**内容：缩放、平移、旋转、仿射**
+
+```python
+M = cv2.getRotationMatrix2D((2,2), 45, 1)
+img_rot = cv2.warpAffine(img_norm, M, (4,4))
+```
+
+**公式**
+仿射/旋转矩阵推导。
+
+---
+
+## **Week 8：图像分割（第10章）**
+
+**内容：全局阈值、Otsu法、边缘检测、区域生长**
+
+```python
+_, otsu = cv2.threshold(img_uint8,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+```
+
+**公式**
+Otsu法、梯度边缘公式。
+
+---
+
+## **Week 9：特征提取（第11章）**
+
+**内容：角点、边缘、纹理（LBP）等**
+
+```python
+from skimage.feature import local_binary_pattern
+lbp = local_binary_pattern(img_uint8, 8, 1)
+```
+
+**公式**
+LBP模式提取公式。
+
+---
+
+## **Week 10：图像描述与模式识别（第12章）**
+
+**内容：形状描述（矩）、特征向量、简单分类**
+
+```python
+moments = cv2.moments(img_uint8)
+print("Hu矩：", cv2.HuMoments(moments).flatten())
+```
+
+**公式**
+Hu不变矩公式。
+
+---
+
+## **Week 11：图像融合与综合应用（第13章/扩展应用）**
+
+**内容：多模态图像融合（均值/PCA/小波）、综合处理**
+
+```python
+def fuse_average(ir, vis): return 0.5*ir + 0.5*vis
+# 或见前PCA例子
+```
+
+**公式**
+融合公式及原理简述。
+
+---
+
+## **Week 12：图像质量评价与主观评价（第14章）**
+
+**内容：PSNR、SSIM、熵等指标**
+
+```python
+def psnr(img1, img2):
+    mse = np.mean((img1-img2)**2)
+    return 10*np.log10(1.0/(mse+1e-8))
+```
+
+**公式**
+PSNR、SSIM表达式。
+
+---
+
+
+
+
+
+
 # 为了学以致用，作业为如下三个理解实践性项目，如下<br/>
 
 1. (第六周截止)基于相位的图像对齐方法概述，需要理解如下论文中的算法和相应的MATLAB实现，并得到用自己的 _人脸照片_ 进行实验的结果 <br/>
