@@ -126,7 +126,7 @@ $$
 
 ---
 
-# 📙《数字图像处理》章节式课程项目(请用自己的人脸图像）
+# 📙《数字图像处理》章节式课程项目(请用自己的人脸图像）[提交作业模板.docx](https://github.com/jinqijinqi/Artificial-Intelligence-Course/blob/main/homework/%E4%BD%9C%E4%B8%9A%201-%E5%91%A81-pytorch%E5%AE%89%E8%A3%85.docx) <br/>
 
 ---
 
