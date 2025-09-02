@@ -180,9 +180,7 @@ $$
 
 （零均值归一化互相关，NCC）
 
-$$
-\rho(u,v)=\frac{\sum_{x,y}(T(x,y)-\overline{T})(I(x+u,y+v)-\overline{I}_{u,v})}{\sqrt{\sum_{x,y}(T(x,y)-\overline{T})^2}\ \sqrt{\sum_{x,y}(I(x+u,y+v)-\overline{I}_{u,v})^2}}
-$$
+![](https://github.com/jinqijinqi/image-processing-course/blob/main/%E5%85%AC%E5%BC%8Fcorrelation.PNG)
 
 ```matlab
 I = im2double(imread('cameraman.tif'));   % 灰度图
