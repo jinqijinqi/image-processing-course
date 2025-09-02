@@ -133,7 +133,7 @@ $$
 ## **Week 1：数字图像基础（第2章）**
 
 **主要内容：像素、灰度级、基本变换**
-
+1. 图像归一化：
 ```python
 import numpy as np
 img = np.random.randint(50,200,(4,4)).astype(np.float32)
@@ -148,6 +148,56 @@ $$
 I' = \frac{I - I_{min}}{I_{max} - I_{min}}
 $$
 
+2. Gamma 变换（图像增强）
+
+**数学公式**
+
+$$
+s = c\, r^{\gamma},\quad r\in[0,1],\ c=1
+$$
+
+
+
+```matlab
+I = im2double(imread('cameraman.tif'));   % 灰度图
+gammas = [0.5, 1.0, 2.2];
+figure;
+for k = 1:numel(gammas)
+    J = I .^ gammas(k);
+    subplot(1,3,k); imshow(J); title(sprintf('\\gamma=%.2f', gammas(k)));
+end
+```
+
+3. 互相关图像块搜索（NCC 模板匹配）
+
+**数学公式**
+
+（互相关）
+
+$$
+C(u,v)=\sum_{x,y} T(x,y)\, I(x+u,y+v)
+$$
+
+（零均值归一化互相关，NCC）
+
+$$
+\rho(u,v)=\frac{\sum_{x,y}(T(x,y)-\overline{T})(I(x+u,y+v)-\overline{I}_{u,v})}{\sqrt{\sum_{x,y}(T(x,y)-\overline{T})^2}\ \sqrt{\sum_{x,y}(I(x+u,y+v)-\overline{I}_{u,v})^2}}
+$$
+
+```matlab
+I = im2double(imread('cameraman.tif'));   % 灰度图
+r0 = 80; c0 = 90; h = 40; w = 40;
+T  = I(r0:r0+h-1, c0:c0+w-1);             % 模板块
+
+C = normxcorr2(T, I);                     % NCC 响应
+[ypeak, xpeak] = find(C == max(C(:)));    % 峰值位置
+yoff = ypeak - size(T,1);
+xoff = xpeak - size(T,2);
+
+figure; imshow(I); hold on;
+rectangle('Position',[xoff, yoff, w, h], 'EdgeColor','r','LineWidth',2);
+plot(xoff+w/2, yoff+h/2, 'r+'); title('Best NCC Match');
+```
 ---
 
 ## **Week 2：图像增强（一）- 灰度变换与直方图处理（第3章）**
